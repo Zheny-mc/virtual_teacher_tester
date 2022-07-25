@@ -2,10 +2,10 @@ package io.proj3ct.SpringDemoBot.entity;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
@@ -14,10 +14,15 @@ import java.util.List;
 @Data
 @Accessors(fluent = true)
 @NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Document
 public class UniversityСourse {
 
+    @Id
+    private String _id;
+    @NonNull
     private String title;
+    @NonNull
     private List<Сhapter> сhapterList;
 
     public void addTest(Сhapter сhapter) {

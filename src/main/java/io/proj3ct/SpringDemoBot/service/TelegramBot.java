@@ -5,13 +5,12 @@ import io.proj3ct.SpringDemoBot.config.BotConfig;
 import io.proj3ct.SpringDemoBot.entity.Question;
 import io.proj3ct.SpringDemoBot.entity.Testing;
 import io.proj3ct.SpringDemoBot.entity.UniversityСourse;
+import io.proj3ct.SpringDemoBot.repositoryes.UniversityСourseRepository;
 import io.proj3ct.SpringDemoBot.view.StructCourse;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -38,15 +37,18 @@ public class TelegramBot extends TelegramLongPollingBot {
     Boolean isAnswer;
     Testing testing;
 
-    final UniversityСourse сourse;
+    final UniversityСourse trainingCourse;
     final BotConfig config;
 
     final StructCourse structCourse;
-
-    public TelegramBot(UniversityСourse сourse, BotConfig config, StructCourse structCourse) {
-        this.сourse = сourse;
+    final UniversityСourseRepository repository;
+    
+    
+    public TelegramBot(UniversityСourse trainingCourse, BotConfig config, StructCourse structCourse, UniversityСourseRepository repository) {
+        this.trainingCourse = trainingCourse;
         this.config = config;
         this.structCourse = structCourse;
+        this.repository = repository;
         List<BotCommand> listofCommands = new ArrayList<>();
         listofCommands.add(new BotCommand("/start", "вывод приветственного сообщения"));
         listofCommands.add(new BotCommand("/test_selection", "выбор теста"));
@@ -55,6 +57,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         listofCommands.add(new BotCommand("/answers", "ответить"));
         listofCommands.add(new BotCommand("/next_question", "взять следующий вопрос"));
         listofCommands.add(new BotCommand("/stop", "сбросить результаты прохождения теста"));
+        listofCommands.add(new BotCommand("/save_course", "сохранить тест в базу"));
+        listofCommands.add(new BotCommand("/delete_course", "удалить курс из базы"));
+
         try {
             this.execute(new SetMyCommands(listofCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
@@ -171,7 +176,15 @@ public class TelegramBot extends TelegramLongPollingBot {
                         throw new RuntimeException(e);
                     }
                     break;
+                    
+                case "/save_course":
+                    repository.save(trainingCourse);
+                    break;
 
+                case "/delete_course":
+                    var сourse = repository.findAll().get(0);
+                    repository.delete(сourse);
+                    break;
                 default:
                     sendMessage(chatId, "Sorry, command was not recognized");
 
@@ -182,7 +195,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private Testing selectTest(Integer sectionNumber, Integer testNumber) {
         sectionNumber--;
         testNumber--;
-        return сourse.сhapterList().get(sectionNumber)
+        return trainingCourse.сhapterList().get(sectionNumber)
                 .testingList().get(testNumber);
     }
 
