@@ -16,7 +16,7 @@ public class DataConfig {
     @Bean
     public UniversityСourse getCourse() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        Path path = Path.of("Test.json");
+        Path path = Path.of("course_content.json");
         String is = Files.readString(path);
         UniversityСourse universityСourse = mapper.readValue(is, UniversityСourse.class);
 
@@ -26,7 +26,7 @@ public class DataConfig {
     @Bean
     public Testing getTesting() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        Path path = Path.of("Test.json");
+        Path path = Path.of("course_content.json");
         String is = Files.readString(path);
         UniversityСourse universityСourse = mapper.readValue(is, UniversityСourse.class);
 
