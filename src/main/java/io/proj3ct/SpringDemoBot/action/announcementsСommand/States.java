@@ -1,4 +1,4 @@
-package io.proj3ct.SpringDemoBot.service.command;
+package io.proj3ct.SpringDemoBot.action.announcementsСommand;
 
 public enum States {
     Start("/start"),
@@ -32,6 +32,6 @@ public enum States {
                 }
             }
         }
-        throw new IllegalArgumentException("No such value");
+        return States.Start;
     }
 }
