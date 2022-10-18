@@ -5,7 +5,6 @@ import io.proj3ct.SpringDemoBot.action.answerObject.NextQuestionAnswer;
 import io.proj3ct.SpringDemoBot.entity.Question;
 import io.proj3ct.SpringDemoBot.entity.Testing;
 import io.proj3ct.SpringDemoBot.entity.UniversityСourse;
-import io.proj3ct.SpringDemoBot.repositoryes.UniversityСourseRepository;
 import io.proj3ct.SpringDemoBot.view.StructCourse;
 import javafx.util.Pair;
 import lombok.Data;
@@ -22,7 +21,7 @@ public abstract class IAction {
         return null;
     }
 
-    public Pair<List<String>, Testing> execute(List<String> args, UniversityСourse trainingCourse) {
+    public Pair<List<String>, Testing> execute(List<String> args) {
         return null;
     }
 
@@ -45,9 +44,6 @@ public abstract class IAction {
         return null;
     }
 
-    public List<String> execute(UniversityСourseRepository repository, UniversityСourse trainingCourse) {
-        return null;
-    }
 
 
 }

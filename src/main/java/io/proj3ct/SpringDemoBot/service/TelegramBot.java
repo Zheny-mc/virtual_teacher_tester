@@ -6,6 +6,7 @@ import io.proj3ct.SpringDemoBot.action.announcementsСommand.States;
 import io.proj3ct.SpringDemoBot.action.ActionRun;
 import io.proj3ct.SpringDemoBot.action.CollectionAction;
 import io.proj3ct.SpringDemoBot.action.IAction;
+import io.proj3ct.SpringDemoBot.view.Menu;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -13,12 +14,13 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static io.proj3ct.SpringDemoBot.view.Menu.setMainMenu;
 
 
 @Slf4j
@@ -40,8 +42,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.actionRun = actionRun;
 
         actionMap = actions.getActions();
+
         try {
-            setMainMenu(this);
+            Menu.setMainMenu(this);
         } catch (TelegramApiException e) {
             log.error("Error setting bot's command list: " + e.getMessage());
         }
@@ -77,15 +80,49 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendMessage(long chatId, String textToSend)  {
+    private void sendMessage(long chatId, String textToSend) {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
         message.setText(textToSend);
 
-        try{
+        message = installKeyBoard(message);
+
+        executeMessage(message);
+    }
+
+    private SendMessage installKeyBoard(SendMessage message) {
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+
+        KeyboardRow row = new KeyboardRow();
+        row.add("/start");
+        row.add("/stop");
+        keyboardRows.add(row);
+
+        row = new KeyboardRow();
+        row.add("/answers title_answer1");
+        row.add("/answers title_answer2");
+        row.add("/answers title_answer3");
+        keyboardRows.add(row);
+
+        row = new KeyboardRow();
+        row.add("/test_selection 1_1");
+        row.add("/begin_test");
+        row.add("/question");
+        row.add("/next_question");
+        keyboardRows.add(row);
+
+        keyboardMarkup.setKeyboard(keyboardRows);
+
+        message.setReplyMarkup(keyboardMarkup);
+        return message;
+    }
+
+    private void executeMessage(SendMessage message){
+        try {
             execute(message);
-        }
-        catch (TelegramApiException e) {
+        } catch (TelegramApiException e) {
             log.error("Error occurred: " + e.getMessage());
         }
     }

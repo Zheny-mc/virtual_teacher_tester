@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -15,10 +12,8 @@ import java.util.List;
 @Accessors(fluent = true)
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Document
 public class UniversityСourse {
 
-    @Id
     private String _id;
     @NonNull
     private String title;

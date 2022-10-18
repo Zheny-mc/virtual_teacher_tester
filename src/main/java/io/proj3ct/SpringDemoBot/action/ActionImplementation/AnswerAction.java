@@ -39,17 +39,17 @@ public class AnswerAction extends IAction {
     private String checkAnswerStudent(String answerStudent) {
         StringBuilder answer = new StringBuilder();
 
-        var trueAnswer = currQuestion.answerList().stream()
-                .filter(i-> i.isValid() == true)
+        var trueAnswer = currQuestion.getAnswerList().stream()
+                .filter(i-> i.getIsValid() == true)
                 .collect(Collectors.toList())
-                .get(0).title();
+                .get(0).getTitle();
 
         if (answerStudent.equals(trueAnswer)) {
             answer.append("Верно!)");
             isAnswer = true;
         }
         else {
-            currQuestion.recommendationList().forEach(i -> answer.append(i.title() + "\n"));
+            currQuestion.getRecommendationList().forEach(i -> answer.append(i.getTitle() + "\n"));
         }
         return answer.toString();
     }

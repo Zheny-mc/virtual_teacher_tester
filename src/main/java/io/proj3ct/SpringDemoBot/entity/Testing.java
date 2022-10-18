@@ -1,9 +1,7 @@
 package io.proj3ct.SpringDemoBot.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import io.proj3ct.SpringDemoBot.entity.for_request.TestingMessageRequest;
 import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
@@ -11,18 +9,19 @@ import lombok.experimental.FieldDefaults;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonIgnoreProperties({ "currentQuestion" })
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
-@Accessors(fluent = true)
 @NoArgsConstructor
-@AllArgsConstructor
 public class Testing {
     String title;
     List<Question> questionList;
     Integer currentQuestion;
+
+    public Testing(String title, List<Question> questionList) {
+        this.title = title;
+        this.questionList = questionList;
+        this.currentQuestion = 0;
+    }
 
     public Testing(String title) {
         this.title = title;
@@ -52,5 +51,12 @@ public class Testing {
         }
         ++currentQuestion;
         return questionList.get(currentQuestion);
+    }
+
+    public static Testing get(TestingMessageRequest obj) {
+        return new Testing(
+                obj.getTitle(),
+                obj.getQuestionList()
+        );
     }
 }

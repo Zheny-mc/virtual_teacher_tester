@@ -19,8 +19,8 @@ public class QuestionAction extends IAction {
 
     @Override
     public Pair<List<String>, Boolean> execute(Question currQuestion, Boolean isAnswer) {
-        StringBuilder answer = new StringBuilder(currQuestion.title());
-        currQuestion.answerList().forEach( i -> answer.append("\n\t" + i.title()) );
+        StringBuilder answer = new StringBuilder(currQuestion.getTitle());
+        currQuestion.getAnswerList().forEach( i -> answer.append("\n\t" + i.getTitle()) );
         isAnswer = false;
         return new Pair<>( List.of( answer.toString() ), isAnswer);
     }

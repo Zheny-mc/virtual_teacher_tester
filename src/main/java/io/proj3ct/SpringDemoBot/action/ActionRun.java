@@ -1,9 +1,9 @@
 package io.proj3ct.SpringDemoBot.action;
 
+import io.proj3ct.SpringDemoBot.clients.telegram_client.TelegramClient;
 import io.proj3ct.SpringDemoBot.entity.Question;
 import io.proj3ct.SpringDemoBot.entity.Testing;
 import io.proj3ct.SpringDemoBot.entity.UniversityСourse;
-import io.proj3ct.SpringDemoBot.repositoryes.UniversityСourseRepository;
 import io.proj3ct.SpringDemoBot.action.announcementsСommand.States;
 import io.proj3ct.SpringDemoBot.view.StructCourse;
 import lombok.AccessLevel;
@@ -28,18 +28,16 @@ public class ActionRun {
     Question currQuestion;
     Boolean isAnswer;
     Testing testing;
-
-    final UniversityСourse trainingCourse;
     final StructCourse structCourse;
-    final UniversityСourseRepository repository;
-
+    final TelegramClient telegramClient;
     public List<String> execute() {
         switch (state) {
             case Start:
                 response = action.execute( name, structCourse );
+                telegramClient.updateStatusTest(Boolean.FALSE);
                 break;
             case TestSelection: {
-                var result = action.execute(args, trainingCourse);
+                var result = action.execute(args);
                 response = result.getKey();
                 testing = result.getValue();
                 break;
@@ -75,14 +73,9 @@ public class ActionRun {
                 var result = action.execute(testing);
                 response = result.getKey();
                 isAnswer = result.getValue();
+                telegramClient.updateStatusTest(Boolean.TRUE);
                 break;
             }
-            case SaveCourse:
-                response = action.execute(repository, trainingCourse);
-                break;
-            case DeleteCourse:
-                response = action.execute(repository, trainingCourse);
-                break;
             default:
                 response.add( getDefaultAnswer() );
         }

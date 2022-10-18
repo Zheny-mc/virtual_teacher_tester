@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @Data
-@Accessors(fluent = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Answer {
